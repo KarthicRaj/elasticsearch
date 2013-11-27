@@ -1,0 +1,19 @@
+allprojects {
+    task hello << {task -> println "I'm $task.project.name" }
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile group: 'org.twitter4j', name: 'twitter4j-core', version: '[3.0,)'
+    }
+
+}
+
+
+
+
