@@ -18,7 +18,7 @@ public class Search {
             e.printStackTrace();
         }
         for (Status status : result.getTweets()) {
-            System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText() + "\n");
+            System.out.println("@" + status.getId() + " : " + status.getText() + "\n");
             System.out.println(DataObjectFactory.getRawJSON(status));
         }
 
