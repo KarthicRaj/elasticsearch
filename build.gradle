@@ -10,10 +10,8 @@ allprojects {
 
     dependencies {
         compile group: 'org.twitter4j', name: 'twitter4j-core', version: '[3.0,)'
+        compile group: 'org.elasticsearch', name: 'elasticsearch', version: '0.90.6'
     }
 
 }
-
-
-
 

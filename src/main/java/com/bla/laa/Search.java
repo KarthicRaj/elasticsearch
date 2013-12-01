@@ -3,10 +3,12 @@ package com.bla.laa;
 import twitter4j.*;
 import twitter4j.json.DataObjectFactory;
 
+import java.util.List;
+
 public class Search {
 
 
-    public void doSearch() throws TwitterException {
+    public List<Status> doSearch() throws TwitterException {
         Twitter twitter = TwitterFactory.getSingleton();
         Query query = new Query("maxima");
         query.setLang("lv");
@@ -17,10 +19,12 @@ public class Search {
         } catch (TwitterException e) {
             e.printStackTrace();
         }
+
         for (Status status : result.getTweets()) {
             System.out.println("@" + status.getId() + " : " + status.getText() + "\n");
-            System.out.println(DataObjectFactory.getRawJSON(status));
+            //System.out.println(DataObjectFactory.getRawJSON(status));
         }
 
+        return result.getTweets();
     }
 }
