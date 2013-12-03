@@ -4,18 +4,24 @@ properties = YAML.load_file( "VagarntProperties.yaml")
 Vagrant.configure("2") do |config|
 
   #
+  # TODO : bootstrap upgrade puppet  !!!!
+  #
+
+  #
   # Prepare env.
   #
-  config.vm.provision "shell", inline: "sudo yum install -y git mc wget curl"
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifest_file = "packages.pp"
+  end
+
+  #
+  # Prepare install httpd, java7, configure firewall 
+  #
   config.vm.provision "shell", inline: "sudo gem install librarian-puppet --verbose"
   config.vm.provision "shell", inline: "sudo cp /vagrant/Puppetfile /etc/puppet/Puppetfile"
   config.vm.provision "shell", inline: "cd /etc/puppet && sudo librarian-puppet install --verbose"
-  config.vm.provision "shell", inline: "rpm -i http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/htop-1.0.2-1.el6.rf.x86_64.rpm"
-
   config.vm.provision "puppet" do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file = "init.pp"
-    puppet.options = "--verbose --debug"
+        puppet.manifest_file = "init.pp"
   end
 
   #
@@ -100,7 +106,8 @@ Vagrant.configure("2") do |config|
   #
   # Install kibana
   #
-  #config.vm.provision "shell", inline: "curl -Lv https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz | tar -xz"
-  #config.vm.provision "shell", inline: "mv -v kibana-3.0.0milestone4/* /var/www/kibana/"
+  #config.vm.provision "puppet" do |puppet|
+  #  puppet.manifest_file = "kibana.pp"
+  #end
 
 end
