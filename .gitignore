@@ -4,3 +4,5 @@ twitter4j.properties
 out
 *.iml
 data
+.ssh
+VagarntProperties.yaml
