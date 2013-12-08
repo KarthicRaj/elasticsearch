@@ -25,7 +25,11 @@ file { "/var/www/kibana":
 	ensure  => directory,
 }
 
+exec {"cleanKibanaWwwDir":
+    command => "/bin/rm -rf /var/www/kibana/*",
+}
+
 exec {"moveKibanaToWwwDir":
-    command => "/bin/mv /tmp/kibanaUnziped/kibana-3.0.0milestone4/** /var/www/kibana",
-    require => [ File["/var/www/kibana"], Exec["unzipKibana"] ],
+    command => "/bin/mv -f /tmp/kibanaUnziped/kibana-3.0.0milestone4/** /var/www/kibana",
+    require => [ File["/var/www/kibana"], Exec["unzipKibana"], Exec["cleanKibanaWwwDir"] ],
 }
