@@ -24,7 +24,7 @@ public class TwitterSearchDaemon {
 
     private static final int MAX_RESULTS_PER_SEARCH = 100;
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat SDF_DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private Queue<Twitter> twitters = new LinkedList<Twitter>();
 
@@ -113,14 +113,14 @@ public class TwitterSearchDaemon {
         QueryResult queryResult = twitter.search(query);
         List<Status> statuses = queryResult.getTweets();
 
-        System.out.println(sdf.format(new Date()) + ": " + statuses.size() + " search results retrieved for " + query);
+        System.out.println(SDF_DATETIME.format(new Date()) + ": " + statuses.size() + " search results retrieved for " + query);
 
         process(statuses);
 
         lastQueryResults.put(query, queryResult);
 	}
 
-    private void onException(String message, Exception e) {
+    private void printException(String message, Exception e) {
         System.err.println(message + " - " + e.getMessage());
         e.printStackTrace(System.err);
     }
@@ -136,7 +136,7 @@ public class TwitterSearchDaemon {
             try {
                 listener.onStatus(status);
             } catch (Exception e) {
-                onException("Exception while notifying listener", e);
+                printException("Exception while notifying listener", e);
             }
         }
     }
@@ -151,7 +151,7 @@ public class TwitterSearchDaemon {
             @Override
             public void onStatus(Status status) {
                 System.out.println(status.getId() + " " +
-                                   sdf.format(status.getCreatedAt()) + " " +
+                                   SDF_DATETIME.format(status.getCreatedAt()) + " " +
                                    status.getUser().getScreenName() + ": " +
                                    status.getText().replaceAll("\\s", " "));
             }
