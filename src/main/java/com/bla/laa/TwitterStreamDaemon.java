@@ -40,6 +40,10 @@ public class TwitterStreamDaemon implements StatusListener {
     public void track(String[] keywordsets) {
         FilterQuery filterQuery = new FilterQuery();
         filterQuery.track(keywordsets);
+        track(filterQuery);
+    }
+
+    public void track(FilterQuery filterQuery) {
         twitterStream.cleanUp();
         twitterStream.filter(filterQuery);
     }
