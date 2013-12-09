@@ -6,11 +6,9 @@ Vagrant.configure("2") do |config|
   #
   # Prepare env.
   #
-  config.vm.provision "shell", inline: "sudo yum -y install git mc wget curl unzip"
-  config.vm.provision "shell", inline: "sudo gem install librarian-puppet"
-  config.vm.provision "shell", inline: "sudo cp /vagrant/Puppetfile /etc/puppet/Puppetfile"
-  config.vm.provision "shell", inline: "cd /etc/puppet && sudo librarian-puppet install"
-
+  #config.vm.provision "shell", inline: "sudo yum -y install git mc wget curl unzip nano"
+  #config.vm.provision "shell", inline: "sudo rpm -i http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/htop-1.0.2-1.el6.rf.x86_64.rpm"
+  
   #
   #  AWS insnstance with Centos6.4. Puppet.2.6.18"
   #
@@ -29,17 +27,27 @@ Vagrant.configure("2") do |config|
         aws.instance_type = "t1.micro"
         aws.region = "eu-west-1"
         aws.availability_zone = "eu-west-1c"
-        aws.user_data = "#!/bin/bash\necho 'Defaults:ec2-user !requiretty' > /etc/sudoers.d/999-vagrant-cloud-init-requiretty && chmod 440 /etc/sudoers.d/999-vagrant-cloud-init-requiretty\nyum install -y puppet\n"
+        aws.user_data = "#!/bin/bash\necho 'Defaults:ec2-user !requiretty' > /etc/sudoers.d/999-vagrant-cloud-init-requiretty && chmod 440 /etc/sudoers.d/999-vagrant-cloud-init-requiretty"
     end
 
     # install puppet
-    slave.vm.provision "shell", inline: "rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-7.noarch.rpm"
-    slave.vm.provision "shell", inline: "yum -y install puppet"
+    #slave.vm.provision "shell", inline: "rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-7.noarch.rpm"
+    #slave.vm.provision "shell", inline: "yum -y install puppet"
 
+    #
+    # instal gems 
+    #
+    #gem_installed = `gem --version` rescue nil
+    #if !gem_installed
+    #  slave.vm.provision "shell", path: "./scripts/installGem.sh"
+    #end
+
+    #slave.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
+    
     #  Install ES
     slave.vm.provision "puppet", manifest_file: "slave.pp"
- 
   end
+
 
   #
   #  Local insatnce with Centos6.4 Minimal Puppet 3.2.3
@@ -56,19 +64,16 @@ Vagrant.configure("2") do |config|
     master.vm.network "forwarded_port", guest: 9200, host: 9200
     master.vm.network "forwarded_port", guest: 9300, host: 9300
     master.vm.network "forwarded_port", guest: 8080, host: 8080
-    #master.vm.network "private_network", ip: "127.
 
-  #  Install ES
-    master.vm.provision "puppet" do |puppet|
-      puppet.manifests_path = "manifests"
-      puppet.manifest_file = "master.pp"
-    end
+    config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
+
+    #  Install ES
+    master.vm.provision "puppet", manifest_file: "master.pp"
 
     # Install kibana
-    master.vm.provision "puppet" do |puppet|
-      puppet.manifest_file = "kibana.pp"
-    end
+    master.vm.provision "puppet", manifest_file: "kibana.pp"
   end
+
 
   #
   # Test service 
