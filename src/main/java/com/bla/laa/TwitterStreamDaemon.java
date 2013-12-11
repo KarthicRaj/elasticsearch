@@ -24,6 +24,28 @@ public class TwitterStreamDaemon implements StatusListener {
     private List<StatusListener> listeners = new LinkedList<StatusListener>();
 
 
+    public static void main(String[] args) {
+
+        TwitterStreamDaemon daemon = new TwitterStreamDaemon(TwitterStreamFactory.getSingleton());
+
+        daemon.addListener(new StatusAdapter() {
+            @Override
+            public void onStatus(Status status) {
+                System.out.println(status.getId() + " " +
+                        SDF_DATETIME.format(status.getCreatedAt()) + " " +
+                        status.getUser().getScreenName() + ": " +
+                        status.getText().replaceAll("\\s", " "));
+            }
+        });
+
+        List<String> keywordsets = new ArrayList<String>();
+
+        keywordsets.add("latvia");
+        keywordsets.add("balts sniegs");
+
+        daemon.track(keywordsets);
+    }
+
     public TwitterStreamDaemon(TwitterStream twitterStream) {
         this.twitterStream = twitterStream;
         this.twitterStream.addListener(this);
@@ -101,25 +123,5 @@ public class TwitterStreamDaemon implements StatusListener {
         }
     }
 
-    public static void main(String[] args) {
 
-        TwitterStreamDaemon daemon = new TwitterStreamDaemon(TwitterStreamFactory.getSingleton());
-
-        daemon.addListener(new StatusAdapter() {
-            @Override
-            public void onStatus(Status status) {
-                System.out.println(status.getId() + " " +
-                                   SDF_DATETIME.format(status.getCreatedAt()) + " " +
-                                   status.getUser().getScreenName() + ": " +
-                                   status.getText().replaceAll("\\s", " "));
-            }
-        });
-
-        List<String> keywordsets = new ArrayList<String>();
-
-        keywordsets.add("latvia");
-        keywordsets.add("balts sniegs");
-
-        daemon.track(keywordsets);
-    }
 }

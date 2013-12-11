@@ -14,7 +14,6 @@ import twitter4j.GeoLocation;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
-import twitter4j.StatusAdapter;
 import twitter4j.StatusListener;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -22,7 +21,8 @@ import twitter4j.TwitterFactory;
 
 public class TwitterSearchDaemon {
 
-    private static final int MAX_RESULTS_PER_SEARCH = 100;
+    private static final int MAX_RESULTS_PER_SEARCH = 15;
+    private static final int INTERVAL_IN_SECONDS = 15;
 
     private static final SimpleDateFormat SDF_DATETIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -36,6 +36,7 @@ public class TwitterSearchDaemon {
     private Timer timer = new Timer();
 
     public TwitterSearchDaemon() {
+        addTwitter(TwitterFactory.getSingleton());
     }
 
     public void addTwitter(Twitter twitter) {
@@ -82,15 +83,16 @@ public class TwitterSearchDaemon {
         return twitter;
     }
 
-    public void start(int intervalInSeconds) {
+    public void start() {
 
         TimerTask task = new TimerTask() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 TwitterSearchDaemon.this.run();
             }
         };
 
-        timer.scheduleAtFixedRate(task, 0, intervalInSeconds * 1000);
+        timer.scheduleAtFixedRate(task, 0, INTERVAL_IN_SECONDS * 1000);
     }
 
     public void run() {
@@ -107,9 +109,9 @@ public class TwitterSearchDaemon {
 
         QueryResult lastQueryResult = lastQueryResults.get(query);
 
-        if (lastQueryResult != null)
+        if (lastQueryResult != null){
             query.setSinceId(lastQueryResult.getMaxId());
-
+        }
         QueryResult queryResult = twitter.search(query);
         List<Status> statuses = queryResult.getTweets();
 
@@ -118,7 +120,7 @@ public class TwitterSearchDaemon {
         process(statuses);
 
         lastQueryResults.put(query, queryResult);
-	}
+    }
 
     private void printException(String message, Exception e) {
         System.err.println(message + " - " + e.getMessage());
@@ -139,28 +141,6 @@ public class TwitterSearchDaemon {
                 printException("Exception while notifying listener", e);
             }
         }
-    }
-
-    public static void main(String[] args) {
-
-        TwitterSearchDaemon daemon = new TwitterSearchDaemon();
-
-        daemon.addTwitter(TwitterFactory.getSingleton());
-
-        daemon.addListener(new StatusAdapter() {
-            @Override
-            public void onStatus(Status status) {
-                System.out.println(status.getId() + " " +
-                                   SDF_DATETIME.format(status.getCreatedAt()) + " " +
-                                   status.getUser().getScreenName() + ": " +
-                                   status.getText().replaceAll("\\s", " "));
-            }
-        });
-
-        daemon.addQuery("latvija");
-        daemon.addQuery(56.968936, 24.105163, 20);
-
-        daemon.start(15);
     }
 
 }
