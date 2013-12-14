@@ -61,9 +61,12 @@ Vagrant.configure("2") do |config|
       instance_config.vm.network :private_network, ip: instances_ip, virtualbox__intnet: true
       instance_config.vm.provision "shell", path: "./scripts/puppetBootstrap.sh"
       instance_config.vm.provision "puppet", manifest_file: "packages.pp"
-      instance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"      
+      instance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
       instance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
       instance_config.vm.provision "puppet", manifest_file: "localInstance.pp"
+      if instance_name.to_s.eql? "localInstance1"
+        instance_config.vm.provision "puppet", manifest_file: "kibana.pp"
+      end
       #instance_config.vm.provision "shell", inline: "curl localhost:9200/_nodes/process?pretty"
     end
   end

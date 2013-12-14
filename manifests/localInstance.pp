@@ -34,3 +34,24 @@ elasticsearch::plugin{'royrusso/elasticsearch-HQ':
   module_dir => "/usr/share/elasticsearch/plugin",
   require => Class["Java"]
 } 
+
+elasticsearch::plugin{'mobz/elasticsearch-head':
+  module_dir => "/usr/share/elasticsearch/plugin",
+  require => Class["Java"]
+} 
+
+elasticsearch::plugin{'polyfractal/elasticsearch-inquisitor':
+  module_dir => "/usr/share/elasticsearch/plugin",
+  require => Class["Java"]
+} 
+
+
+elasticsearch::plugin{'polyfractal/elasticsearch-segmentspy':
+  module_dir => "/usr/share/elasticsearch/plugin",
+  require => Class["Java"]
+} 
+
+elasticsearch::plugin{'karmi/elasticsearch-paramedic':
+  module_dir => "/usr/share/elasticsearch/plugin",
+  require => Class["Java"]
+} 

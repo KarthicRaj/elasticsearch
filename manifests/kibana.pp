@@ -1,8 +1,16 @@
 
+#
+# Install httpd
+#
+class { 'apache': }
+apache::vhost { "kibana.local.host":
+    port    => "8080",
+    docroot => "/var/www/kibana",
+}
 
-#  config.vm.provision "shell", inline: "curl -Lv https://download.elasticsearch.org/kibana/kibana/kibana-3.0.0milestone4.tar.gz | tar -xz"
-#  config.vm.provision "shell", inline: "mv -v kibana-3.0.0milestone4/* /var/www/kibana/"
-
+#
+# Install kibana
+#
 $enhancers = [ "tar", "wget" ]
 package { $enhancers: ensure => "installed" }
 
@@ -23,6 +31,7 @@ exec {"unzipKibana":
 
 file { "/var/www/kibana":
 	ensure  => directory,
+    require => [ Class ["apache"] ]   
 }
 
 exec {"cleanKibanaWwwDir":
@@ -33,3 +42,5 @@ exec {"moveKibanaToWwwDir":
     command => "/bin/mv -f /tmp/kibanaUnziped/kibana-3.0.0milestone4/** /var/www/kibana",
     require => [ File["/var/www/kibana"], Exec["unzipKibana"], Exec["cleanKibanaWwwDir"] ],
 }
+
+info "http://localhost:8080/"

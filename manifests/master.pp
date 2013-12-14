@@ -6,14 +6,6 @@ class { "java":
  	version	=> "latest"
 }
 
-#
-# Install httpd
-#
-class { 'apache': }
-apache::vhost { "kibana.local.host":
-    port    => "8080",
-    docroot => "/var/www/kibana",
-}
 
 #
 # configure firewall

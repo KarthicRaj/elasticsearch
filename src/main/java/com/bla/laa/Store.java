@@ -19,36 +19,38 @@ public class Store {
 
     public void doStore(List<Status> tweets) {
 
-        Client client = new TransportClient()
-                .addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
+        Client client =  getClient();
         for (Status status : tweets) {
-            IndexResponse response = client.prepareIndex("twitter", "tweet", String.valueOf(status.getId()))
-                    .setSource(DataObjectFactory.getRawJSON(status))
-                    .execute()
-                    .actionGet();
-
-            System.out.println(response.getId());
+            String id = String.valueOf(status.getId());
+            String strObj =  DataObjectFactory.getRawJSON(status);
+            storeStrObj(client, id, strObj  );
         }
     }
 
     public void doStore(Status tweet) {
 
+        Client client =  getClient();
+        String id = String.valueOf(tweet.getId());
+        String strObj =  DataObjectFactory.getRawJSON(tweet);
+        storeStrObj(client, id, strObj  );
+
+    }
+
+    private void storeStrObj(Client client, String id, String strObj){
+        IndexResponse response = client.prepareIndex("twitter_2", "tweet", id)
+                .setSource(strObj)
+                .execute()
+                .actionGet();
+        System.out.println(response.getId());
+    }
+
+    private Client getClient(){
         Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", "lvTwetterCluster").build();
         Client client = new TransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
                 .addTransportAddress(new InetSocketTransportAddress("192.168.56.102", 9300));
 
-        //Node node = nodeBuilder().node();
-        //Client client = node.client();
-
-        IndexResponse response = client.prepareIndex("twitter", "tweet", String.valueOf(tweet.getId()))
-                .setSource(DataObjectFactory.getRawJSON(tweet))
-                .execute()
-                .actionGet();
-
-        System.out.println(response.getId());
-
-
+        return client;
     }
 
 

@@ -1,0 +1,49 @@
+curl -X PUT  http://localhost:9200/twitter_17/ -d '
+    {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas" : 1
+        },
+        "mappings": {
+            "tweet": {
+                "_source" : {
+                    "enabled" : "true"
+                },
+                "_timestamp": {
+                    "enabled": "true",
+                    "store" : "true"
+                },
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+'
+
+
+curl -X PUT http://localhost:9200/twitter_17/tweet/1 -d '
+    {
+        "tweet" : {
+            "message" : "You know, for Search"
+        }
+    }
+'
+
+curl http://localhost:9200/twitter_17/tweet/1?pretty=1&fields=_timestamp
+
+
+curl 'localhost:9200/twitter_17/_refresh'
+
+
+curl -XPOST 'localhost:9200/twitter_17/_search?pretty=1' -d '
+    {
+        "query" : {
+            "match_all" : {
+            }
+        },
+        "fields" : [ "_timestamp" ]
+    }
+'
