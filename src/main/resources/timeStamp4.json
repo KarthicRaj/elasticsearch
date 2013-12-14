@@ -1,0 +1,39 @@
+curl -X PUT  http://localhost:9200/twitter_29/ -d '
+    {
+        "settings": {
+            "number_of_shards": 1,
+            "number_of_replicas" : 1
+        },
+        "mappings": {
+            "tweet": {
+                "_source" : {
+                    "enabled" : "true"
+                },
+                "_timestamp" : {
+                    "enabled" : true,
+                    "store" : true
+                },
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "post_date": {
+                        "type": "date",
+                        "format": "date"
+                    }
+                }
+            }
+        }
+    }
+'
+
+curl -X PUT http://localhost:9200/twitter_29/tweet/1 -d '
+    {
+        "tweet" : {
+            "message" : "You know, for Search",
+            "post_date" : "2001-02-01"
+        }
+    }
+'
+
+curl http://localhost:9200/twitter_29/tweet/1?pretty=1&fields=post_date

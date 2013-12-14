@@ -6,12 +6,16 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.node.Node;
 import twitter4j.Status;
 import twitter4j.json.DataObjectFactory;
 
+import java.io.IOException;
 import java.util.List;
 
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 
@@ -52,6 +56,53 @@ public class Store {
 
         return client;
     }
+
+
+    public static void main (String args[]) throws IOException {
+        new Store().test2();
+
+    }
+
+
+    private void test2() throws IOException {
+        Client client =  getClient();
+
+        client.admin().indices().prepareDelete().execute().actionGet();
+        client.admin().indices().prepareCreate("twitter").execute().actionGet();
+        client.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
+
+        String mapping = jsonBuilder()
+                .startObject()
+                    .startObject("tweet")
+                        .startObject("_timestamp")
+                            .field("enabled", "yes")
+                            .field("store", "yes")
+                            .field("path","post_date")
+                        .endObject()
+                        .startObject("properties")
+                            .startObject("field1")
+                                .field("type", "string")
+                                .field("store", "yes")
+                            .endObject()
+                            .startObject("field2")
+                                .field("type", "string")
+                                .field("store", "no")
+                            .endObject()
+                        .endObject()
+                    .endObject()
+                .endObject().string();
+
+        client.admin().indices().preparePutMapping().setType("tweet").setSource(mapping).execute().actionGet();
+
+        client.prepareIndex("twitter", "tweet", "3").setSource(jsonBuilder().startObject()
+                .field("field1", "value1")
+                .field("post_date", "2009-11-15T14:12:13")
+                .endObject()).execute().actionGet();
+
+        client.admin().indices().prepareRefresh().execute().actionGet();
+
+    }
+
 
 
 }
