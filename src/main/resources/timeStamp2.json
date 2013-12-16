@@ -1,4 +1,8 @@
-curl -X PUT  http://localhost:9200/twitter_31/ -d '
+/*
+ * Works !
+ */
+
+curl -X PUT  http://localhost:9200/twitter_47/ -d '
     {
         "settings": {
             "number_of_shards": 1,
@@ -17,15 +21,12 @@ curl -X PUT  http://localhost:9200/twitter_31/ -d '
                 "_timestamp" : {
                     "enabled" : "yes",
                     "store" : "yes",
-                    "path" : "post_date",
+                    "path" : "tweet.created_at",
                     "index" : "no",
-                    "format": "date"
+                    "format": "EEE MMM yy HH:mm:ss Z yyyy"
                 },
                 "properties": {
                     "message": {
-                        "type": "string"
-                    },
-                    "post_date": {
                         "type": "string"
                     }
                 }
@@ -34,24 +35,11 @@ curl -X PUT  http://localhost:9200/twitter_31/ -d '
     }
 '
 
-curl -X PUT http://localhost:9200/twitter_30/tweet/1 -d '
+curl -X PUT http://localhost:9200/twitter_47/tweet/2 -d '
     {
         "tweet" : {
             "message" : "You know, for Search",
-            "post_date" : "2009-02-01"
+            "created_at" : "Fri Dec 13 21:02:05 +0000 2013"
         }
     }
 '
-
-Wed, 06 Dec 2000 02:55:00 -0800"
-E, d MMM yyyy HH:mm:ss Z
-
-
-"message" : "You know, for Search",
-"postDate" : "2009-11-15T14:12:12"
-1386985087251
-"format" : "EEE MMM yy HH:mm:ss Z yyyy"
-"postDate" : "Fri Dec 13 21:02:05 +0000 2013"
-
-
-curl http://localhost:9200/twitter_14/tweet/1?pretty=1&fields=_source,_timestamp,_all
