@@ -41,7 +41,7 @@ public class Store {
     }
 
     private void storeStrObj(Client client, String id, String strObj){
-        IndexResponse response = client.prepareIndex("twitter_2", "tweet", id)
+        IndexResponse response = client.prepareIndex("twitter", "tweet", id)
                 .setSource(strObj)
                 .execute()
                 .actionGet();

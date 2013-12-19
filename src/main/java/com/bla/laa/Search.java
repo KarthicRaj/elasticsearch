@@ -8,9 +8,11 @@ import java.util.List;
 public class Search {
 
 
-    public List<Status> doSearch() throws TwitterException {
+    public List<Status> doSearch(String byQuery) throws TwitterException {
+        System.out.println("query by : "+ byQuery);
+
         Twitter twitter = TwitterFactory.getSingleton();
-        Query query = new Query("maxima");
+        Query query = new Query(byQuery);
         query.setLang("lv");
 
         QueryResult result = null;
@@ -21,8 +23,7 @@ public class Search {
         }
 
         for (Status status : result.getTweets()) {
-            System.out.println("@" + status.getId() + " : " + status.getText() + "\n");
-            //System.out.println(DataObjectFactory.getRawJSON(status));
+            System.out.println("@" + status.getId() + " : " + status.getText());
         }
 
         return result.getTweets();

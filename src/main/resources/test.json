@@ -1,0 +1,82 @@
+{
+    "contributors": null, "text": "Kā pārdot veco mašīnu.. http://t.co/ttbJmsuak8 http://t.co/zrZ1VcZHdC #gn", "geo": null, "retweeted": false, "in_reply_to_screen_name": null, "possibly_sensitive": false, "truncated": false, "lang": "lv", "entities": {
+    "symbols": [],
+    "urls": [
+        {
+            "expanded_url": "http://www.youtube.com/watch?feature=player_embedded&v=Fr6FklMc6B0",
+            "indices": [24, 46],
+            "display_url": "youtube.com/watch?feature=\u2026",
+            "url": "http://t.co/ttbJmsuak8"
+        },
+        {
+            "expanded_url": "http://fstoppers.com/filmmaker-creates-awesome-car-commercial-for-his-used-96-nissan-maxima",
+            "indices": [47, 69],
+            "display_url": "fstoppers.com/filmmaker-crea\u2026",
+            "url": "http://t.co/zrZ1VcZHdC"
+        }
+    ],
+    "hashtags": [
+        {
+            "text": "gn",
+            "indices": [70, 73]
+        }
+    ],
+    "user_mentions": []
+}, "in_reply_to_status_id_str": null, "id": 413789441056993282, "source": "web", "in_reply_to_user_id_str": null, "favorited": false, "in_reply_to_status_id": null, "retweet_count": 0, "created_at": "Thu Dec 19 21:54:25 +0000 2013", "in_reply_to_user_id": null, "favorite_count": 0, "id_str": "413789441056993282", "place": null, "user": {
+    "location": "Svēte, Jelgava",
+    "default_profile": false,
+    "profile_background_tile": false,
+    "statuses_count": 7377,
+    "lang": "xx-lc",
+    "profile_link_color": "1414C7",
+    "profile_banner_url": "https://pbs.twimg.com/profile_banners/592803566/1380572940",
+    "id": 592803566,
+    "following": false,
+    "protected": false,
+    "favourites_count": 551,
+    "profile_text_color": "333333",
+    "description": "Floorball - Jelgavas Novads #15 | Spsk.lv head | JSĢ | Photo | LV HH| YMSharks",
+    "verified": false,
+    "contributors_enabled": false,
+    "profile_sidebar_border_color": "FFFFFF",
+    "name": "Bagvels Lielpēdis",
+    "profile_background_color": "098080",
+    "created_at": "Mon May 28 15:12:18 +0000 2012",
+    "default_profile_image": false,
+    "followers_count": 430,
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/378800000829386364/3b394a2b1e19185d70efd49993df2771_normal.jpeg",
+    "geo_enabled": true,
+    "profile_background_image_url": "http://a0.twimg.com/profile_background_images/720367118/1e0108e79cbcdc76483b26e3d0875ec4.png",
+    "profile_background_image_url_https": "https://si0.twimg.com/profile_background_images/720367118/1e0108e79cbcdc76483b26e3d0875ec4.png",
+    "follow_request_sent": false,
+    "entities": {
+        "description": {
+            "urls": []
+        },
+        "url": {
+            "urls": [
+                {
+                    "expanded_url": "http://tedisfotografe.tumbrl.com",
+                    "indices": [0, 22],
+                    "display_url": "tedisfotografe.tumbrl.com",
+                    "url": "http://t.co/GUm3hQ7Chw"
+                }
+            ]
+        }
+    },
+    "url": "http://t.co/GUm3hQ7Chw",
+    "utc_offset": 7200,
+    "time_zone": "Riga",
+    "notifications": false,
+    "profile_use_background_image": true,
+    "friends_count": 425,
+    "profile_sidebar_fill_color": "DDEEF6",
+    "screen_name": "TedisTeodors",
+    "id_str": "592803566",
+    "profile_image_url": "http://pbs.twimg.com/profile_images/378800000829386364/3b394a2b1e19185d70efd49993df2771_normal.jpeg",
+    "listed_count": 1,
+    "is_translator": false
+}, "coordinates": null, "metadata": {
+    "result_type": "recent",
+    "iso_language_code": "lv"
+}}

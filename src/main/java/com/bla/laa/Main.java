@@ -7,9 +7,16 @@ import java.util.List;
 
 public final class Main {
     public static void main(String args[]) throws TwitterException {
-        Search search = new Search();
-        List<Status> tweets =  search.doSearch();
-        new Store().doStore(tweets);
+
+
+        String queryStr = "maxima";
+
+        while (true){
+            List<Status> tweets =  new Search().doSearch(queryStr);
+            queryStr = new Utils().getRandomWord(tweets);
+            new Store().doStore(tweets);
+        }
+
 
         /*
         TwitterSearchDaemon daemon = new TwitterSearchDaemon();
