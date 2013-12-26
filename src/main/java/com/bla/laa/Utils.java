@@ -1,11 +1,15 @@
 package com.bla.laa;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import twitter4j.Status;
 
 import java.util.List;
 import java.util.Random;
 
 public class Utils {
+    static Logger logger = LogManager.getLogger(Utils.class.getName());
+
 
     private Random random = new Random();
     private String wasteSymb[] ={"(", ")",",",".",":",";","'","[","]","{","}","_","-","*","&","^","%","$","£","@","!","~"};
@@ -14,18 +18,18 @@ public class Utils {
         if (tweets.size() == 0 ){
             return "maxima";
         }
-        System.out.println("working with tweets : "+ tweets.size());
+        logger.debug("working with tweets : " + tweets.size());
         int tweetCount =  tweets.size();
 
         String tweetText = tweets.get(randomizer(tweetCount)).getText();
-        System.out.println("selected text : "+ tweetText);
+        logger.debug("selected text : " + tweetText);
 
         String tokinazedText[] = tweetText.split(" ");
 
         String selectedWord = tokinazedText[randomizer(tokinazedText.length)];
-        System.out.println("selected word : "+ selectedWord);
+        logger.debug("selected word : " + selectedWord);
         selectedWord = removeWaste(selectedWord);
-        System.out.println("cleared word : "+ selectedWord);
+        logger.debug("cleared word : " + selectedWord);
 
         if (selectedWord.length() < 3){
             selectedWord = getRandomWord(tweets);
@@ -35,7 +39,7 @@ public class Utils {
     }
 
     private int randomizer(int seed ){
-        System.out.println("seed : "+ seed);
+        logger.debug("seed : " + seed);
         return  random.nextInt(seed);
     }
 

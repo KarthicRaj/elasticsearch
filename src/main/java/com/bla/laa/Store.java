@@ -1,5 +1,7 @@
 package com.bla.laa;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -16,12 +18,20 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import static org.elasticsearch.common.xcontent.XContentFactory.smileBuilder;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-
 
 public class Store {
 
-    public void doStore(List<Status> tweets) {
+    public static final String LV_TWETTER_CLUSTER = "lvTwetterCluster";
+    static Logger logger = LogManager.getLogger(Store.class.getName());
+
+    private String indicesName = "tweets";
+    private String typeName = "tweet";
+    private Client client;
+
+    public void doStore(List<Status> tweets) throws IOException {
+        logger.info("Storing ( " + tweets.size() + " ) tweets");
 
         Client client =  getClient();
         for (Status status : tweets) {
@@ -31,76 +41,73 @@ public class Store {
         }
     }
 
-    public void doStore(Status tweet) {
-
-        Client client =  getClient();
-        String id = String.valueOf(tweet.getId());
-        String strObj =  DataObjectFactory.getRawJSON(tweet);
-        storeStrObj(client, id, strObj  );
-
-    }
-
     private void storeStrObj(Client client, String id, String strObj){
-        IndexResponse response = client.prepareIndex("twitter", "tweet", id)
+        logger.debug("Try to store tweet : " + id);
+
+        IndexResponse response = client.prepareIndex(indicesName, typeName, id)
                 .setSource(strObj)
                 .execute()
                 .actionGet();
-        System.out.println(response.getId());
+
+        logger.debug(" Stored tweet id :  " + response.getId() + " version " + response.getVersion());
     }
 
-    private Client getClient(){
-        Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", "lvTwetterCluster").build();
-        Client client = new TransportClient(settings)
-                .addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
-                .addTransportAddress(new InetSocketTransportAddress("192.168.56.102", 9300));
-
+    private Client getClient() throws IOException {
+        if ( client == null ) {
+            logger.info(" Traying to connect cluster : "+ LV_TWETTER_CLUSTER );
+            Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", LV_TWETTER_CLUSTER).build();
+            client = new TransportClient(settings)
+                    .addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
+                    .addTransportAddress(new InetSocketTransportAddress("192.168.56.102", 9300));
+            createMapping();
+        }
         return client;
     }
 
-
-    public static void main (String args[]) throws IOException {
-        new Store().test2();
-
-    }
-
-
-    private void test2() throws IOException {
+    private void createMapping() throws IOException {
         Client client =  getClient();
 
-        client.admin().indices().prepareDelete().execute().actionGet();
-        client.admin().indices().prepareCreate("twitter").execute().actionGet();
-        client.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
+        //client.admin().indices().prepareDelete().execute().actionGet();
+        if (!client.admin().indices().prepareExists(indicesName).execute().actionGet().isExists()){
+            logger.info("creating indice ( "+ indicesName +" ) with type ( "+ typeName +" ) ");
+            client.admin().indices().prepareCreate(indicesName).execute().actionGet();
+            client.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
 
-        String mapping = jsonBuilder()
-                .startObject()
-                    .startObject("tweet")
-                        .startObject("_timestamp")
-                            .field("enabled", "yes")
-                            .field("store", "yes")
-                            .field("path","post_date")
-                        .endObject()
-                        .startObject("properties")
-                            .startObject("field1")
-                                .field("type", "string")
-                                .field("store", "yes")
-                            .endObject()
-                            .startObject("field2")
-                                .field("type", "string")
-                                .field("store", "no")
-                            .endObject()
-                        .endObject()
-                    .endObject()
-                .endObject().string();
 
-        client.admin().indices().preparePutMapping().setType("tweet").setSource(mapping).execute().actionGet();
+            StringBuilder sb = new StringBuilder();
+            sb.append("{                                                           ");
+            sb.append("    \""+ typeName +"\": {                                   ");
+            sb.append("        \"_source\": {                                      ");
+            sb.append("            \"enabled\": \"true\"                           ");
+            sb.append("        },                                                  ");
+            sb.append("        \"_timestamp\": {                                   ");
+            sb.append("            \"enabled\": \"yes\",                           ");
+            sb.append("            \"store\":   \"yes\",                           ");
+            sb.append("            \"path\":    \"created_at\",                    ");
+            sb.append("            \"index\":   \"no\",                            ");
+            sb.append("            \"format\":  \"EEE MMM yy HH:mm:ss Z yyyy\"     ");
+            sb.append("        },                                                  ");
+            sb.append("        \"properties\": {                                   ");
+            sb.append("            \"created_at\": {                               ");
+            sb.append("                \"type\":   \"date\",                       ");
+            sb.append("                \"format\": \"EEE MMM yy HH:mm:ss Z yyyy\"  ");
+            sb.append("            },                                              ");
+            sb.append("            \"user.created_at\": {                          ");
+            sb.append("                \"type\":   \"date\",                       ");
+            sb.append("                \"format\": \"EEE MMM yy HH:mm:ss Z yyyy\"  ");
+            sb.append("            }                                               ");
+            sb.append("        }                                                   ");
+            sb.append("    }                                                       ");
+            sb.append("}                                                           ");
 
-        client.prepareIndex("twitter", "tweet", "3").setSource(jsonBuilder().startObject()
-                .field("field1", "value1")
-                .field("post_date", "2009-11-15T14:12:13")
-                .endObject()).execute().actionGet();
+            client.admin().indices().preparePutMapping().setType(typeName).setSource(sb.toString()).execute().actionGet();
 
-        client.admin().indices().prepareRefresh().execute().actionGet();
+            //client.prepareIndex(indicesName, typeName).setSource(jsonBuilder().startObject()
+            //        .field("created_at", "Thu Dec 26 09:29:56 +0000 2013")
+            //        .endObject()).execute().actionGet();
 
+            client.admin().indices().prepareRefresh().execute().actionGet();
+        }
     }
 
 

@@ -1,6 +1,4 @@
 allprojects {
-    task hello << {task -> println "I'm $task.project.name" }
-
     apply plugin: 'java'
     apply plugin: 'idea'
 
@@ -12,7 +10,9 @@ allprojects {
         compile group: 'org.twitter4j', name: 'twitter4j-core', version: '[3.0,)'
         compile group: 'org.twitter4j', name: 'twitter4j-stream', version: '[3.0,)'
         compile group: 'org.elasticsearch', name: 'elasticsearch', version: '0.90.6'
-    }
+        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.0-beta9'
+        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.0-beta9'
 
+    }
 }
 

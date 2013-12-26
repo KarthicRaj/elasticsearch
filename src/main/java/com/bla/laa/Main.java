@@ -1,36 +1,30 @@
 package com.bla.laa;
 
+import org.apache.logging.log4j.LogManager;
 import twitter4j.*;
-import twitter4j.json.DataObjectFactory;
 
+import java.io.IOException;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
 
-public final class Main {
-    public static void main(String args[]) throws TwitterException {
 
+public class Main {
+    static Logger logger = LogManager.getLogger(Main.class);
+
+    public static void main(String args[]) throws TwitterException, InterruptedException, IOException {
+        logger.info("Starting lv-twitter crawler ... ");
+
+        Search search = new Search();
+        Store store = new Store();
+        Utils utils = new Utils();
 
         String queryStr = "maxima";
-
         while (true){
-            List<Status> tweets =  new Search().doSearch(queryStr);
-            queryStr = new Utils().getRandomWord(tweets);
-            new Store().doStore(tweets);
+            List<Status> tweets =  search.doSearch(queryStr);
+            queryStr = utils.getRandomWord(tweets);
+            store.doStore(tweets);
+            Thread.sleep(5000);
         }
 
-
-        /*
-        TwitterSearchDaemon daemon = new TwitterSearchDaemon();
-        daemon.addListener(new StatusAdapter() {
-            @Override
-            public void onStatus(Status status) {
-                System.out.println(status.getId());
-                System.out.println(DataObjectFactory.getRawJSON(status));
-                new Store().doStore(status);
-            }
-        });
-        daemon.addQuery("latvija");
-        daemon.addQuery(56.968936, 24.105163, 20);
-        daemon.start();
-        */
     }
 }
