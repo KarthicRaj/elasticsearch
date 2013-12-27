@@ -39,17 +39,25 @@ public class Store {
             String strObj =  DataObjectFactory.getRawJSON(status);
             storeStrObj(client, id, strObj  );
         }
+
+        logger.info("Doc count ( " + getDocCount() + " ) ");
+
     }
 
     private void storeStrObj(Client client, String id, String strObj){
         logger.debug("Try to store tweet : " + id);
 
-        IndexResponse response = client.prepareIndex(indicesName, typeName, id)
-                .setSource(strObj)
-                .execute()
-                .actionGet();
+        if (!client.prepareGet(indicesName, typeName, id).execute().actionGet().isExists()){
+            IndexResponse response = client.prepareIndex(indicesName, typeName, id)
+                    .setSource(strObj)
+                    .execute()
+                    .actionGet();
+            logger.debug("Stored tweet id :  " + response.getId() + " version " + response.getVersion());
 
-        logger.debug(" Stored tweet id :  " + response.getId() + " version " + response.getVersion());
+        } else {
+            logger.debug("Tweet with id  ( " + id + " ) already exists ");
+        }
+
     }
 
     private Client getClient() throws IOException {
@@ -64,12 +72,19 @@ public class Store {
         return client;
     }
 
+    private long getDocCount() throws IOException {
+        Client client =  getClient();
+        long count = client.prepareCount(indicesName).execute().actionGet().getCount();
+        return count;
+    }
+
+
     private void createMapping() throws IOException {
         Client client =  getClient();
 
-        //client.admin().indices().prepareDelete().execute().actionGet();
+        client.admin().indices().prepareDelete().execute().actionGet();
         if (!client.admin().indices().prepareExists(indicesName).execute().actionGet().isExists()){
-            logger.info("creating indice ( "+ indicesName +" ) with type ( "+ typeName +" ) ");
+            logger.info("Creating indice ( "+ indicesName +" ) with type ( "+ typeName +" ) ");
             client.admin().indices().prepareCreate(indicesName).execute().actionGet();
             client.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
 
