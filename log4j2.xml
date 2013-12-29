@@ -16,11 +16,15 @@
         <Console name="Stdout" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
         </Console>
+        <Socket name="Socket" host="localhost" port="9500">
+            <SerializedLayout />
+        </Socket>
     </Appenders>
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="Stdout" level="info" />
             <AppenderRef ref="RollingFile" level="debug" />
+            <AppenderRef ref="Socket" level="debug" />
         </Root>
     </Loggers>
 </Configuration>
