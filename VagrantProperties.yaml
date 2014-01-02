@@ -1,0 +1,5 @@
+aws:
+  access_key_id: "XXXXXXXXXXXXXXXXXXXX"
+  secret_access_key: "sdfasdfdsfklkdsflks/sdfdsfdsfdsfd/23r23r"
+  keypair_name: "keypairName"
+  private_key_path: "keypairPath"

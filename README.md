@@ -1,6 +1,7 @@
 elasticsearch
 =============
 
+
 preparing vagrant and plugins
 ---------------------------
  * install vagrant 
