@@ -1,5 +1,5 @@
 require "yaml"
-properties = YAML.load_file( "VagarntProperties.yaml")
+properties = YAML.load_file( "VagrantProperties.yaml")
 
 Vagrant.configure("2") do |config|
 
@@ -59,6 +59,10 @@ Vagrant.configure("2") do |config|
       instance_config.vm.box = instance_name.to_s
       instance_config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v0.1.0/centos64-x86_64-20131030.box"
       instance_config.vm.network :private_network, ip: instances_ip, virtualbox__intnet: true
+      instance_config.vm.provider :virtualbox do |virtualbox|
+        virtualbox.customize ["modifyvm", :id, "--memory", "1024"]
+        virtualbox.customize ["modifyvm", :id, "--cpus", "1"]
+      end 
       instance_config.vm.provision "shell", path: "./scripts/puppetBootstrap.sh"
       instance_config.vm.provision "puppet", manifest_file: "packages.pp"
       instance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
@@ -67,7 +71,8 @@ Vagrant.configure("2") do |config|
       if instance_name.to_s.eql? "localInstance1"
         instance_config.vm.provision "puppet", manifest_file: "kibana.pp"
       end
-      #instance_config.vm.provision "shell", inline: "curl localhost:9200/_nodes/process?pretty"
+      instance_config.vm.provision "puppet", manifest_file: "logstash.pp"
+    
     end
   end
 

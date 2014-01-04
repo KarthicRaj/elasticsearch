@@ -7,7 +7,6 @@ buildscript {
     }
     dependencies {
         classpath 'org.gradle.plugins:shadow:0.7.4'
-    //    //compile(group: 'org.gradle.plugins', name: 'shadow', version: '0.7.4')
     }
 }
 
@@ -15,7 +14,6 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'shadow'
-
 
     repositories {
         mavenCentral()
@@ -37,7 +35,7 @@ allprojects {
             attributes 'Class-Path': '.'
         }
     }
-
+    
     task wrapper(type: Wrapper) {
         gradleVersion = '1.10'
     }
