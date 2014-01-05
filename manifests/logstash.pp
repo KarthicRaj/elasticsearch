@@ -12,8 +12,8 @@ logstash::input::file{'sysLogInput':
     path => [ "/var/log/*.log", "/var/log/messages", "/var/log/syslog" ]
 }
 
-logstash::input::file{'applicationLogInput':
-    type => "ApplicationLog",
+logstash::input::file{'tweetCrawlerLogInput':
+    type => "tweetCrawlerLog",
     sincedb_path => "~/.sincedb*",    
     path => [ "/home/vagrant/es/logs/forLogstash.log" ]
 }

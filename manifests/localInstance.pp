@@ -45,7 +45,6 @@ elasticsearch::plugin{'polyfractal/elasticsearch-inquisitor':
   require => Class["Java"]
 } 
 
-
 elasticsearch::plugin{'polyfractal/elasticsearch-segmentspy':
   module_dir => "/usr/share/elasticsearch/plugin",
   require => Class["Java"]

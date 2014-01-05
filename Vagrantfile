@@ -68,11 +68,9 @@ Vagrant.configure("2") do |config|
       instance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
       instance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
       instance_config.vm.provision "puppet", manifest_file: "localInstance.pp"
-      if instance_name.to_s.eql? "localInstance1"
-        instance_config.vm.provision "puppet", manifest_file: "kibana.pp"
-      end
-      instance_config.vm.provision "puppet", manifest_file: "logstash.pp"
-    
+      instance_config.vm.provision "puppet", manifest_file: "kibana.pp"
+      instance_config.vm.provision "puppet", manifest_file: "logstash.pp"      
+      instance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
     end
   end
 
