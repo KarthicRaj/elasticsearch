@@ -11,12 +11,26 @@ public class Main {
     static Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String args[]) throws TwitterException, InterruptedException, IOException {
-        logger.info("Starting lv-twitter crawler ... ");
+        logger.info("Starting twitter Crawler ... ");
 
-        //new Tactics().searchByDynamicKey();
-        //new Tactics().searchByGeo();
-        new Tactics().searchByOnDayInPass();
+        if (args.length != 0){
+            Tactics tactics = new Tactics();
+            switch (args[0]){
+                case "1" :  {
+                    tactics.searchByDynamicKey();
+                }
+                case "2" : {
+                    tactics.searchByGeo();
+                }
+                case "3" : {
+                    tactics.searchByOnDayInPass();
+                }
 
+            }
+        } else {
+            logger.info("Please specify crawling tactics [1,2,3] ! ");
+        }
 
+        logger.info("Program quiting ... ");
     }
 }

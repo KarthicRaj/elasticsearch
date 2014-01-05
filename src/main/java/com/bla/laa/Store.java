@@ -63,13 +63,24 @@ public class Store {
     private Client getClient() throws IOException {
         if ( client == null ) {
             logger.info(" Traying to connect cluster : "+ LV_TWETTER_CLUSTER );
-            Settings settings = ImmutableSettings.settingsBuilder().put("cluster.name", LV_TWETTER_CLUSTER).build();
+
+            Settings settings = ImmutableSettings.settingsBuilder()
+                    .put("cluster.name", LV_TWETTER_CLUSTER)
+                    .put("client.transport.ping_timeout", "10s")
+                    .build();
+
             client = new TransportClient(settings)
                     .addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
                     .addTransportAddress(new InetSocketTransportAddress("192.168.56.102", 9300));
+
             createMapping();
         }
         return client;
+    }
+
+    public void closeClient(){
+        logger.debug("Closing connection to : "+ LV_TWETTER_CLUSTER);
+        client.close();
     }
 
     private long getDocCount() throws IOException {
@@ -82,7 +93,7 @@ public class Store {
     private void createMapping() throws IOException {
         Client client =  getClient();
 
-        client.admin().indices().prepareDelete().execute().actionGet();
+        //client.admin().indices().prepareDelete().execute().actionGet();
         if (!client.admin().indices().prepareExists(indicesName).execute().actionGet().isExists()){
             logger.info("Creating indice ( "+ indicesName +" ) with type ( "+ typeName +" ) ");
             client.admin().indices().prepareCreate(indicesName).execute().actionGet();

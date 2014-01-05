@@ -1,7 +1,7 @@
 #
 # htop Yum repo 
 #
-package {"htop": 
+package {"htopRepo": 
    ensure => installed,
    provider => rpm, 
    source => "http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm", 
@@ -11,5 +11,5 @@ package {"htop":
 # Base packages 
 #
 Package { ensure => "installed" }
-$enhancers = [ "git", "mc", "wget", "curl", "unzip", "nano"]
+$enhancers = [ "git", "mc", "wget", "curl", "unzip", "nano", "htop"]
 package { $enhancers:  }

@@ -26,5 +26,6 @@ logstash::input::file{'elasticSearchLogInput':
 
 logstash::output::elasticsearch{ 'elasticsearch':
     cluster => "lvTwetterCluster",
-    host => "127.0.0.1"
+    host => "127.0.0.1",
+    bind_host  => $ipaddress_eth1
 }

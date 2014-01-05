@@ -49,11 +49,10 @@ Vagrant.configure("2") do |config|
 
 
   #
-  # Multiple local Es instances -> start with vagrant up /localInstance[1-3]/
+  # Multiple local Es instances -> start with vagrant up /localInstance[1-2]/
   #
   instances = { :localInstance1 => '192.168.56.101',
-                :localInstance2 => '192.168.56.102',
-                :localInstance3 => '192.168.56.103' }
+                :localInstance2 => '192.168.56.102'}
   instances.each do |instance_name, instances_ip|
     config.vm.define instance_name do |instance_config|
       instance_config.vm.box = instance_name.to_s
