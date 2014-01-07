@@ -22,7 +22,7 @@ file { $appPath :
 # coppy jar 
 #
 file { "${appPath}/${appFullName}":
-    source => "/vagrant/build/libs/${appFullName}",
+    source => "/vagrant/build/distributions/${appFullName}",
     require  => File[ $appPath ]
 }
 

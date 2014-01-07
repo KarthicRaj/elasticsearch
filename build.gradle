@@ -4,9 +4,10 @@ buildscript {
             name 'Gradle Shadow'
             url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
         }
+        mavenCentral()   
     }
     dependencies {
-        classpath 'org.gradle.plugins:shadow:0.7.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
     }
 }
 

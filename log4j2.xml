@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
     <Appenders>
-        <RollingFile name="RollingFile" fileName="logs/app.log"
-                     filePattern="log/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFile" fileName="logs/tweetCrawler.log"
+                     filePattern="log/$${date:yyyy-MM}/tweetCrawler-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
@@ -14,7 +14,7 @@
         </RollingFile>
 
         <RollingRandomAccessFile name="LogstashLog" fileName="logs/forLogstash.log"
-                     filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="logs/$${date:yyyy-MM}/forLogstash-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>%m%n</Pattern>
             </PatternLayout>

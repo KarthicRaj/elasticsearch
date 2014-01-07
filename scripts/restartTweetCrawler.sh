@@ -1,9 +1,13 @@
 #!/bin/bash
 
-NOW=$(date +"%Y-%m-%d")
-LOGFILE="logs/log-$NOW.log"
+DATE=$(date +"%m_%d_%Y")
+TIME=`date`
+LOGFILE="logs/app-restarter-$DATE.log"
 appName="tweetCrawler"
 PID=$(ps aux | grep "${appName}" | grep -v grep | awk '{print $2}') 
+mkdir -p logs
+
+echo "$TIME Restart script triggered " >> $LOGFILE
 
 if [ -n "$PID" ]; then
 	echo "Will try to kill ${appName} with pid : $PID " >> $LOGFILE
@@ -23,5 +27,5 @@ else
 fi
 
 echo "Starting new jvm instance " >> $LOGFILE
-nohup java -jar $appName.jar 1 >> /dev/null &
+sh -c "java -jar $appName.jar 1;" >> /dev/null  2>&1 &
 
