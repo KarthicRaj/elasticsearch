@@ -68,7 +68,8 @@ Vagrant.configure("2") do |config|
       instance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
       instance_config.vm.provision "puppet", manifest_file: "localInstance.pp"
       instance_config.vm.provision "puppet", manifest_file: "kibana.pp"
-      instance_config.vm.provision "puppet", manifest_file: "logstash.pp"      
+      instance_config.vm.provision "puppet", manifest_file: "logstash.pp"    
+      `./gradlew shadow`  
       instance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
     end
   end

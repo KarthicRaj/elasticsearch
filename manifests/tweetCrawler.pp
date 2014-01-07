@@ -57,15 +57,15 @@ file { "${appPath}/twitter4j.properties":
 file { "${appPath}/restartTweetCrawler.sh":
     source => "/vagrant/scripts/restartTweetCrawler.sh",
     mode => 750,
-    require => File[ $appPath ]
+    require => File[ $appPath ] 
 }
 
 #
 # cron for jvm restart every 10 min
 #
 cron { "restartJvm":
-  command => "${appPath}/restartTweetCrawler.sh",
-  user    => root,
+  command => "cd  ~/es; ${appPath}/restartTweetCrawler.sh",
+  user    => vagrant,
   minute  => [ 1, 11, 21, 31, 41, 51 ]
 }
 

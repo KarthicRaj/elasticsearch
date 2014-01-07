@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 DATE=$(date +"%m_%d_%Y")
 TIME=`date`
