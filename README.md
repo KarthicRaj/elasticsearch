@@ -46,9 +46,13 @@ running on AWS ec2
 	vagrant up /awsInstance[1-2]/ --provider=aws - (m1.small x2 in ireland )
 
 
-worth of mentioning 
+Worth of mentioning 
 ===================
+
+in case of error "undefined method 'sort!'"
+-------------------------------------------
+	delete ~/.vagrant.d -> http://stackoverflow.com/questions/20528884/vagrant-plugin-install-failing 
 
 virtual box 
 -----------
-	* For private subnet use ip range from  Host-Subnet Go to File->Preferences->Network->Host-only Networks (192.168.56.0/24)	
+	For private subnet use ip range from  Host-Subnet Go to File->Preferences->Network->Host-only Networks (192.168.56.0/24)	
