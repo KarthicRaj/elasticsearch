@@ -6,6 +6,15 @@ class { "java":
 }
 
 #
+# configure firewall
+#
+firewall { "0000 accpet all elasticsearch trafic":
+    port   => [9200, 9300, 8080],
+    proto  => "tcp",
+    action => "accept"
+}
+
+#
 #  install Es 
 #
 class { 'elasticsearch':
@@ -27,6 +36,11 @@ class { 'elasticsearch':
 elasticsearch::plugin{'org.elasticsearch/elasticsearch-cloud-aws/1.16.0':
 	module_dir => "/usr/share/elasticsearch/plugin",
 	require => Class["Java"]
+} 
+
+elasticsearch::plugin{'royrusso/elasticsearch-HQ':
+  module_dir => "/usr/share/elasticsearch/plugin",
+  require => Class["Java"]
 } 
 
 #discovery.zen.ping.multicast.enabled: false
