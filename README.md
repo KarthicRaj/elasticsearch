@@ -19,7 +19,7 @@ Seting up env.
 
 preparing vagrant and plugins
 -----------------------------
- * install vagrant (tested on 1.3.5)
+ * install vagrant (tested on 1.4.3)
  * install VirtualBox (tested on 4.2.20)
  * install aws plugin (for deployment to prod) 
 	-> 'sudo vagrant plugin install vagrant-aws'
@@ -56,3 +56,7 @@ in case of error "undefined method 'sort!'"
 virtual box 
 -----------
 	For private subnet use ip range from  Host-Subnet Go to File->Preferences->Network->Host-only Networks (192.168.56.0/24)	
+	
+"sorry, you must have a tty to run sudo"
+-----------------------------------------
+	upgrade to vagrant 1.4  -> https://github.com/mitchellh/vagrant/issues/1482
