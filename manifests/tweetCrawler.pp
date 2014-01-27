@@ -52,7 +52,7 @@ file { "${appPath}/twitter4j.properties":
 }
 
 #
-# coppt app restart script 
+# copy app restart script 
 #
 file { "${appPath}/restartTweetCrawler.sh":
     source => "/vagrant/scripts/restartTweetCrawler.sh",

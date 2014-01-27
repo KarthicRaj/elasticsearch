@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 
 
   #
-  #  AWS insnstance with Centos6.4."
+  #  AWS insnstance with Centos6.4." -> vagrant up /awsInstance[1-2]/ --provider=aws
   #
   awsInstances = [ "awsInstance1", "awsInstance2"]
   awsInstances.each do |awsInstance_name|
@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
             aws.instance_type = "t1.micro"
             aws.region = "eu-west-1"
             aws.availability_zone = "eu-west-1c"
-            aws.user_data = "#!/bin/bash\necho 'Defaults:ec2-user !requiretty' > /etc/sudoers.d/999-vagrant-cloud-init-requiretty && chmod 440 /etc/sudoers.d/999-vagrant-cloud-init-requiretty"
+            aws.user_data = "#!/bin/bash\necho 'say hello to aws'"
         end
         awsInstance_config.vm.provision "shell", path: "./scripts/puppetBootstrap.sh"
         awsInstance_config.vm.provision "puppet", manifest_file: "packages.pp"
@@ -32,12 +32,14 @@ Vagrant.configure("2") do |config|
         awsInstance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
         awsInstance_config.vm.provision "puppet", manifest_file: "awsInstance.pp"
         awsInstance_config.vm.provision "puppet", manifest_file: "kibana.pp"
-
+        awsInstance_config.vm.provision "puppet", manifest_file: "logstash.pp"    
+        `./gradlew shadow`  
+        awsInstance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
       end
   end
 
   #
-  # Multiple local Es instances -> start with vagrant up /localInstance[1-2]/ --provider=aws
+  # Multiple local Es instances -> start with vagrant up /localInstance[1-2]/
   #
   localInstances = { :localInstance1 => '192.168.56.101', :localInstance2 => '192.168.56.102'}
   localInstances.each do |localInstance_name, localInstance_ip|

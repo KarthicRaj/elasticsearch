@@ -60,3 +60,7 @@ virtual box
 "sorry, you must have a tty to run sudo"
 -----------------------------------------
 	upgrade to vagrant 1.4  -> https://github.com/mitchellh/vagrant/issues/1482
+
+for debug log of es 
+-------------------
+	edit /etc/elasticsearch/logging.yml

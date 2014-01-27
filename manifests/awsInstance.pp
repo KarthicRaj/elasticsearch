@@ -1,3 +1,4 @@
+
 #
 # Java 
 #
@@ -15,6 +16,11 @@ firewall { "0000 accpet all elasticsearch trafic":
 }
 
 #
+# Load aws access keys from yaml properties, absolute path on server  
+#
+$data = loadyaml("/vagrant/VagrantProperties.yaml") 
+
+#
 #  install Es 
 #
 class { 'elasticsearch':
@@ -27,10 +33,21 @@ class { 'elasticsearch':
 	    'cluster' => {
 	     	'name' => 'lvTwetterCluster' 
 	    },
-	    'node' =>{
-	     	'name' => 'slave01'
+
+	    'discovery' => {
+	     	'type' => 'ec2',
+	     	'ec2' => {
+	     		'ping_timeout' => 10s,
+        		'host_type' => private_ip
+	     	}
+	    },
+
+	   	'cloud.aws' => {
+	     	'region' => 'eu-west',
+	     	'access_key' => $data['aws']['access_key_id'],
+	     	'secret_key' => $data['aws']['secret_access_key']
 	    }
-    }
+	}
 }
 
 elasticsearch::plugin{'org.elasticsearch/elasticsearch-cloud-aws/1.16.0':
@@ -43,8 +60,3 @@ elasticsearch::plugin{'royrusso/elasticsearch-HQ':
   require => Class["Java"]
 } 
 
-#discovery.zen.ping.multicast.enabled: false
-#discovery.zen.ping.unicast.hosts: ["153.32.228.250[9300-9400]", "10.122.234.19[9300-9400]"]
-#discovery.zen.minimum_master_nodes: 2
-#discovery.zen.ping.multicast.enabled: false
-#discovery.ec2.host_type: public_ip
