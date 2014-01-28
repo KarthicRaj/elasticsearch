@@ -25,7 +25,7 @@ $data = loadyaml("/vagrant/VagrantProperties.yaml")
 #
 class { 'elasticsearch':
    	autoupgrade => true ,
-   	package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.9.noarch.rpm',
+   	package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.noarch.rpm',
 	config => {
 	   	'network' => {
 	    	'publish_host' => '_ec2:publicIpv4_'
@@ -55,8 +55,13 @@ elasticsearch::plugin{'org.elasticsearch/elasticsearch-cloud-aws/1.16.0':
 	require => Class["Java"]
 } 
 
+elasticsearch::plugin{'elasticsearch/marvel/latest':
+	module_dir => "/usr/share/elasticsearch/plugin",
+	require => Class["Java"]
+} 
+
 elasticsearch::plugin{'royrusso/elasticsearch-HQ':
-  module_dir => "/usr/share/elasticsearch/plugin",
-  require => Class["Java"]
+  	module_dir => "/usr/share/elasticsearch/plugin",
+  	require => Class["Java"]
 } 
 

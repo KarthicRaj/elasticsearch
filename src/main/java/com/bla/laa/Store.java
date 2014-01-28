@@ -70,8 +70,7 @@ public class Store {
                     .build();
 
             client = new TransportClient(settings)
-                    .addTransportAddress(new InetSocketTransportAddress("192.168.56.101", 9300))
-                    .addTransportAddress(new InetSocketTransportAddress("192.168.56.102", 9300));
+                    .addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
 
             createMapping();
         }

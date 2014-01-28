@@ -29,7 +29,7 @@ allprojects {
     }
 
     archivesBaseName = "tweetCrawler"
-    version = 0.6
+    version = 0.7
 
     jar {
         manifest {

@@ -1,17 +1,18 @@
 
 $appName = "tweetCrawler"
-$appVersion = "0.6"
+$appVersion = "0.7"
 $appClassifier = "shadow"
 $appExtension = "jar"
 $appFullName = "${appName}-${appVersion}-${appClassifier}.${appExtension}"
 $appSymlink = "${appName}.${appExtension}"
-$appPath = "/home/vagrant/es"
+$user = "vagrant"
+$appPath = "/home/${user}/es"
 
 notify{"appFullName : ${appFullName}": }
 
 File{
-    owner  => "vagrant",
-    group  => "vagrant",	
+    owner  => $user,
+    group  => $user,	
 } 
 
 file { $appPath :
@@ -19,11 +20,19 @@ file { $appPath :
 }
 
 #
+# Ensure user exists on system 
+#
+user { $user:
+  ensure => "present",
+  managehome => true
+}
+
+#
 # coppy jar 
 #
 file { "${appPath}/${appFullName}":
     source => "/vagrant/build/distributions/${appFullName}",
-    require  => File[ $appPath ]
+    require  => [File[ $appPath ], User[ $user]]
 }
 
 #

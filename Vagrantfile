@@ -5,9 +5,9 @@ Vagrant.configure("2") do |config|
 
 
   #
-  #  AWS insnstance with Centos6.4." -> vagrant up /awsInstance[1-2]/ --provider=aws
+  #  AWS insnstance with Centos6.4." -> vagrant up /awsInstance[1-3]/ --provider=aws
   #
-  awsInstances = [ "awsInstance1", "awsInstance2"]
+  awsInstances = [ "awsInstance1", "awsInstance2", "awsInstance3"]
   awsInstances.each do |awsInstance_name|
       config.vm.define awsInstance_name do |awsInstance_config|
         awsInstance_config.ssh.pty = true
@@ -31,8 +31,8 @@ Vagrant.configure("2") do |config|
         awsInstance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
         awsInstance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
         awsInstance_config.vm.provision "puppet", manifest_file: "awsInstance.pp"
-        awsInstance_config.vm.provision "puppet", manifest_file: "kibana.pp"
-        awsInstance_config.vm.provision "puppet", manifest_file: "logstash.pp"    
+        #awsInstance_config.vm.provision "puppet", manifest_file: "kibana.pp"
+        #awsInstance_config.vm.provision "puppet", manifest_file: "logstash.pp"    
         `./gradlew shadow`  
         awsInstance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
       end
