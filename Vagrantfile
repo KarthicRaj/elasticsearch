@@ -26,15 +26,18 @@ Vagrant.configure("2") do |config|
             aws.availability_zone = "eu-west-1c"
             aws.user_data = "#!/bin/bash\necho 'say hello to aws'"
         end
-        awsInstance_config.vm.provision "shell", path: "./scripts/puppetBootstrap.sh"
-        awsInstance_config.vm.provision "puppet", manifest_file: "packages.pp"
-        awsInstance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
-        awsInstance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
-        awsInstance_config.vm.provision "puppet", manifest_file: "awsInstance.pp"
+        #awsInstance_config.vm.provision "shell", path: "./scripts/puppetBootstrap.sh"
+        #awsInstance_config.vm.provision "puppet", manifest_file: "packages.pp"
+        #awsInstance_config.vm.provision "shell", path: "./scripts/gemBootstrap.sh"
+        #awsInstance_config.vm.provision "shell", path: "./scripts/installLibrarianPuppet.sh"
+        #awsInstance_config.vm.provision "puppet", manifest_file: "awsInstance.pp"
         #awsInstance_config.vm.provision "puppet", manifest_file: "kibana.pp"
         #awsInstance_config.vm.provision "puppet", manifest_file: "logstash.pp"    
-        `./gradlew shadow`  
-        awsInstance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
+        #`./gradlew shadow`  
+        #awsInstance_config.vm.provision "puppet", manifest_file: "tweetCrawler.pp"
+        awsInstance_config.vm.provision "puppet", manifest_file: "newrelic.pp"
+
+
       end
   end
 
