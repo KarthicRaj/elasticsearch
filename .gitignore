@@ -7,7 +7,5 @@ data
 .ssh
 VagarntProperties.yaml
 build
-gradle
-gradlew*
 .gradle/*
 log/*
